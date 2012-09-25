@@ -227,9 +227,13 @@ public class ScalaTestRunner {
     Method method = suiteClass.getMethod("run", Option.class, Reporter.class, Stopper.class, org.scalatest.Filter.class,
         Map.class, Option.class, Tracker.class);
     method.invoke(suite, Some$.MODULE$.apply(testName), reporter, new Stopper() {
+      public boolean stopRequested() {
+        return false;
+      }
       public boolean apply() {
         return false;
       }
+      public void requestStop() {}
     }, Filter$.MODULE$.getClass().getMethod("apply").invoke(Filter$.MODULE$),
         scala.collection.immutable.Map$.MODULE$.empty(), None$.MODULE$, Tracker.class.getConstructor().newInstance());
     }
